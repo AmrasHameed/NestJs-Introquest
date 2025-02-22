@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { AppService, CatService } from './app.service';
+import { Cat, User } from './interfaces.dto';
 
 @Controller('user')
 export class AppController {
@@ -10,11 +11,23 @@ export class AppController {
     console.log(id);
     return this.appService.getHello();
   }
+
+  @Post()
+  postData(@Body() user: User) {
+    console.log(user);
+  }
 }
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatService) {}
+
+  @Post()
+  async create(@Body() createCatDto: Cat) {
+    this.catsService.create(createCatDto);
+  }
+
   @Get()
-  findAll(): string {
-    return 'This action returns all cats';
+  async findAll(): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
 }
