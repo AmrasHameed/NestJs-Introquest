@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AppService, CatService } from './app.service';
 import { Cat, User } from './interfaces.dto';
 
@@ -27,7 +38,7 @@ export class CatsController {
   }
 
   @Get()
-  async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+  async findOne(@Query('name', ParseIntPipe) name: number) {
+    return this.catsService.findOne(name);
   }
 }
